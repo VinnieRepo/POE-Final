@@ -27,28 +27,18 @@ namespace POE_Task_1
 
         {
             protected int X;
-            public int x
+            public int tilex
             {
                 get { return X; }
                 set { X = value; }
             }
-            public int Y;
-            public int y
+            protected int Y;
+            public int tiley
             {
                 get { return Y; }
                 set { Y = value; }
             }
-            
-            
-            public void valuex(int value)
-            {
-                x = value;
-            }
-            public void valuey(int value)
-            {
-                y = value;
-            }
-            public string tilesymbol;
+            protected string tilesymbol;
 
             public string symbolval
             {
@@ -56,6 +46,8 @@ namespace POE_Task_1
                 set { symbolval = value; }
 
             }
+
+            
 
             //Tiletype and Enumerator
 
@@ -67,42 +59,49 @@ namespace POE_Task_1
                 Gold = 3,
                 Weapon =4,
             }
+            protected Tiletypes Tiletype;
 
-
-            // Default values class
-            public class defaults : tile
+            public Tiletypes tiletype
             {
-                public void Basevalues(int xval, int yval, int tiletype)
-                {
-                    x = xval;
-                    y = yval;
-                    var Tiletype = (Tiletypes)tiletype;
+                get { return Tiletype; }
+                set { Tiletype = value; }
+            }
+
+            protected tile(int tilex, int tiley, string symbolval, Tiletypes tiletype)
+            {
+                this.tilex = tilex;
+                this.tiley = tiley;
+                this.symbolval = symbolval;
+                this.tiletype = tiletype;
+            }
+        }
+            
 
 
+        // Default values class
 
-                }
+        public class defaults : tile
+            {
+            public defaults(int tilex, int tiley, string symbolval, Tiletypes tiletype) : base(tilex, tiley, symbolval, tiletype)
+            {
+            }
 
+          
             }
             //Obstacles Classs
             public class obstacles : defaults
             {
-                public void Places(int xval, int yval, int tiletype)
-                {
-                    Basevalues(xval, yval, tiletype);
-                }
-
-
-
+            public obstacles(int tilex, int tiley, string symbolval, Tiletypes tiletype) : base(tilex, tiley, symbolval, tiletype)
+            {
             }
+
+
             // Empty Tiles class.
             public class emptyTiles : defaults
             {
-                public void Places(int xval, int yval, int tiletype)
+                public emptyTiles(int tilex, int tiley, string symbolval, Tiletypes tiletype) : base(tilex, tiley, symbolval, tiletype)
                 {
-                    Basevalues(xval, yval, tiletype);
                 }
-
-
             }
             // Base class for characters
             public abstract class Character : tile
@@ -128,19 +127,32 @@ namespace POE_Task_1
 
 
                 private List<tile> vision;
+
+               
+
                 public List<tile> Vision
                 {
                     get { return vision; }
                     set { vision = value; }
                 }
+                protected Character(int tilex, int tiley, string symbolval, Tiletypes tiletype, int hp, int maxhp, int damage) : base(tilex, tiley, symbolval, tiletype)
+                {
+                    this.symbolval = symbolval;
+                    this.hp = hp;
+                    this.maxhp = maxhp;
+                    this.damage = damage;
+
+                    vision = new List<tile>();
+                }
+
                 public enum Movement
                 { Up, Down, Left, Right, NoMovement };
 
                 //Position of the character.
-                protected void position(int tilex, int tiley)
+                protected void position(int x, int y)
                 {
-                    x = tilex;
-                    y = tiley;
+                    tilex = x;
+                    tiley  = y;
                 }
                 // Death check.
                 public bool isdead(int value)
@@ -189,16 +201,16 @@ namespace POE_Task_1
                     switch (whichway)
                     {
                         case Movement.Up:
-                            y = y - 1;
+                            tiley = tiley - 1;
                             break;
                         case Movement.Down:
-                            y = y + 1;
+                            tiley = tiley + 1;
                             break;
                         case Movement.Left:
-                            x = x - 1;
+                            tilex = tilex - 1;
                             break;
                         case Movement.Right:
-                            x = x + 1;
+                            tilex = tilex + 1;
                             break;
 
                     }
@@ -214,23 +226,24 @@ namespace POE_Task_1
             //Enemy Class
             public abstract class Enemy : Character
             {
-                //Enemy Constructor
-                public void EnemyStats(int posy, int posx, int StartHP, string symbol, int attack)
+                protected Enemy(int tilex, int tiley, string symbolval, Tiletypes tiletype, int hp, int maxhp, int damage) : base(tilex, tiley, symbolval, tiletype, hp, maxhp, damage)
                 {
-                    x = posx;
-                    y = posy;
-                    HP = StartHP;
-                    MAXHP = StartHP;
-                    Damage = attack;
+                    this.damage = damage;
+                    this.hp = hp;
+                    this.maxhp = maxhp;
 
                 }
+
+                //Enemy Constructor
+
                 //Overridden String
                 public override string ToString()
                 {
                     string Stats = GetType().Name + "\n";
-                    Stats += "at [" + x.ToString() + "," + y.ToString() + "] \n";
+                    Stats += "at [" + tilex.ToString() + "," + tiley.ToString() + "] \n";
                     Stats += HP.ToString() + "HP \n;";
-                    return "EnemyClassName at " + "[" + x + ',' + y + "]" + "(" + Damage + ")";
+                    Stats += "{" + Damage.ToString() + "}";
+                    return Stats;
                 }
 
 
@@ -238,15 +251,10 @@ namespace POE_Task_1
             // Goblin Subclass
             public class Goblin : Enemy
             {    //Constructor
-                public void GoblinStats(int tilex, int tiley)
+                public Goblin(int tilex, int tiley, string symbolval, Tiletypes tiletype, int hp, int maxhp, int damage) : base(tilex, tiley, symbolval, tiletype, hp, maxhp, damage)
                 {
-                    x = x;
-                    y = y;
-                    HP = 10;
-                    Damage = 1;
-
-
                 }
+
                 //random movement
                 public override Movement returnmove(Movement move = Movement.Up)
                 {
@@ -258,13 +266,10 @@ namespace POE_Task_1
             //Hero Subclass
             public class Hero : Character
             {
-                public void HeroStats(int x, int y, int hp)
+                public Hero(int tilex, int tiley, string symbolval, Tiletypes tiletype, int hp, int maxhp, int damage) : base(tilex, tiley, symbolval, tiletype, hp, maxhp, damage)
                 {
-                    position(x, y);
-                    HP = hp;
-                    Damage = 2;
-
                 }
+
                 //Movement
                 public override Movement returnmove(Movement move = Movement.Up)
                 {
@@ -274,7 +279,7 @@ namespace POE_Task_1
                 public override string ToString()
                 {
                     return "Player Stats \r\n"
-                        + "HP: " + HP + "/" + MAXHP + "\r\n" + "Damage:" + "(" + Damage + ")\r\n" + "[" + x + ',' + y + "]";
+                        + "HP: " + HP + "/" + MAXHP + "\r\n" + "Damage:" + "(" + Damage + ")\r\n" + "[" + tilex + ',' + tiley + "]";
                 }
             }
             //Attempt at the map creating class, this is where i hit my snag.

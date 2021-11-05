@@ -54,10 +54,12 @@ namespace POE_Task_1
 
             public enum Tiletypes
             {
-                Hero = 1,
-                Enemy = 2,
-                Gold = 3,
-                Weapon =4,
+                Hero = 'H',
+                Enemy ='E',
+                Empty ='v',
+                Gold = 'G',
+                Weapon = 'W',
+                Barrier = 'X'
             }
             protected Tiletypes Tiletype;
 
@@ -283,126 +285,182 @@ namespace POE_Task_1
                 }
             }
             //Attempt at the map creating class, this is where i hit my snag.
-            public class Maphelp
+            public class Map
             {
 
-
-
-                char HeroIcon = '@';
-                private char[,] Enemy { get; set; }
-                public int mapwidth { get; set; }
-                public int mapheight { get; set; }
-
-                public char[,] maptiles;
-
-                char[,] enemyArray { get; set; }
 
                 Random mappy = new Random();
 
                 // Mapfiller
-                public char[,] mapmaking(int maxwidth, int minwidth, int minheight, int maxheight, int numberofenemies)
-                {
-
-
-                    char[,] maptiles = new char[mapwidth, mapheight];
-
-                    for (int i = 0; i < mapwidth; i++)
+                
+                
+                    private tile[,] mapcell;
+                    public tile[,] Mapcell
                     {
-                        for (int j = 0; j < mapheight; j++)
-                        {
-                            maptiles[i, j] = 'v';
-                        }
-
-
-
-
-
-
-
+                        get { return mapcell; }
+                        set { mapcell = value; }
                     }
+
+                    private Hero playerguy;
+                    public Hero Playerguy
+                    {
+                        get { return playerguy; }
+                        set { playerguy = value; }
+                    }
+
+                    private List<Enemy> enemies;
+
+                    public List<Enemy> enemycount
+                    {
+                        get { return enemies; }
+                        set { enemies = value; }
+                    }
+                    private int mapwidth;
+                    public int Mapwidth
+                    {
+                        get { return mapwidth; }
+                        set { mapwidth = value; }
+                    }
+                    private int mapheight;
+                    public int Mapheight
+                    {
+                        get { return mapheight; }
+                        set { mapheight = value; }
+                    }
+
+                public Map( int enemycount, int minheight, int maxheight, int minwidth, int maxwidth)
+                {
                     
                     
-                    return maptiles;
+                    
+
+                    Mapheight = mappy.Next(minheight, maxheight);
+                    Mapwidth = mappy.Next(minwidth, maxwidth);
+                    Mapcell = new tile[mapwidth, mapheight];
+                    enemies = new List<Enemy>();
+
+                    mapmaking(enemycount);
+
+
+
+                    
                 }
-                //Map Populator
-                public void create(int Enemynumb)
+
+
+                void Create(Tiletypes Tiletype, int x = 0, int y = 0)
                 {
-                    int charposy = mappy.Next(1, mapwidth);
-                    int charposx = mappy.Next(1, mapheight);
-                    maptiles[charposx, charposy] = '@';
-
-                    for (int i = 1; i < Enemynumb; i++)
+                    switch (Tiletype)
                     {
-                        
-                        for (int j = 1; j < Enemynumb; j++)
-                        {
-                            int enemyposy = mappy.Next(1, mapheight );
-                            int enemyposx = mappy.Next(1, mapwidth );
-                            if (maptiles[enemyposx, enemyposy] == 'v')
-                            {
-                                maptiles[enemyposy, enemyposx] = '#';
-                            } 
+                        case Tiletypes.Barrier:
+                            obstacles NewBarrier = new obstacles(x, y, "X", Tiletype);
+                            Mapcell[x, y] = NewBarrier;
+                            break;
 
-                            else
+                        case Tiletypes.Empty:
+                            emptyTiles NewEmpty = new emptyTiles(x, y, " ", Tiletype);
+                            Mapcell[x, y] = NewEmpty;
+                            break;
+
+                        case Tiletypes.Hero:
+                            int Herox = mappy.Next(0, mapwidth);
+                            int Heroy = mappy.Next(0, mapheight);
+
+                            while (Mapcell[Herox, Heroy].tiletype != Tiletypes.Empty)
                             {
-                                i = i - 1;
-                              
+                                Herox = mappy.Next(0, mapwidth);
+                                Heroy = mappy.Next(0, mapheight);
                             }
 
+                            Hero NewHero = new Hero(Herox, Heroy, "H", Tiletype, 100, 100, 10);
+
+
+                            int Enemyx = mappy.Next(0, mapwidth);
+                            int Enemyy = mappy.Next(0, mapheight);
+
+                            while (Mapcell[Enemyx, Enemyy].tiletype != Tiletypes.Empty)
+                            {
+                                Enemyx = mappy.Next(0, mapwidth);
+                                Enemyy = mappy.Next(0, mapheight);
+                            }
+                            Goblin NewEnemy = new Goblin(Enemyx, Enemyy, "G", Tiletype, 100, 100, 10);
+                            enemycount.Add(NewEnemy);
+                            Mapcell[Enemyx, Enemyy] = NewEnemy;
+                            break;
+
+
+                        case Tiletypes.Gold:
+                            break;
+
                         }
-
-
-
                     }
 
+                    public override string ToString()
+                {
+                    string MapString = "";
+                    for(int y = 0; y < Mapheight; y++)
+                    {
+                        for (int x = 0; x < Mapwidth; x++)
+                        {
+                            MapString += Mapcell[x, y].symbolval;
+
+                        }
+                        MapString += "\n";
+                    }
+                    return MapString;
                 }
-                //gold and weapons
-                public void createtiles(int gold, int weapon)
-
+                
+                void mapmaking(int EnemyNumb)
                 {
-                    for (int i = 0; i < gold; i++)
+                    
+                    for (int y = 0; y < Mapwidth;y++)
                     {
-                        for (int j = 0; j < gold; j++)
+                        for(int x = 0; x< Mapheight; x++)
                         {
-                            int charposy = mappy.Next(1, mapheight);
-                            int charposx = mappy.Next(1, mapwidth);
-                            if (maptiles[charposx, charposy] == 'v')
+                            if (x==0||x == Mapwidth - 1|| y == 0 || y == Mapheight - 1)
                             {
-                                maptiles[charposx, charposy] = 'G';
-
+                              Create(Tiletypes.Barrier, x, y);
                             }
                             else
                             {
-                                i = i - 1;
+                                Create(Tiletypes.Empty, x, y);
                             }
-
+                            
                         }
+                        Create(Tiletypes.Hero);
 
-
-                    }
-                    for (int i = 0; i < weapon; i++)
-                    {
-                        for (int j = 0; j < weapon; j++)
+                        for (int e = 0; e < EnemyNumb; e++)
                         {
-                            int charposy = mappy.Next(1, mapheight);
-                            int charposx = mappy.Next(1, mapwidth);
-                            if (maptiles[charposx, charposy] == 'v')
-                            {
-                                maptiles[charposx, charposy] = 'W';
-
-                            }
-                            else
-                            {
-                                i = i - 1;
-                            }
+                            Create(Tiletypes.Enemy);
                         }
-
-
                     }
+                }
+
+
+
+
+
+
+            }
+
+            public class GameEngine
+            {
+                private Map gamemap;
+
+                public Map Gamemap
+                {
+                    get { return gamemap; }
+                    set { gamemap = value; }
+                }
+
+                public GameEngine()
+                {
+                    Gamemap = new Map(5, 10, 10, 10, 10);
                 }
 
             }
         }
+
+        
         private void Form1_Load(object sender, EventArgs e)
         {
 
@@ -410,7 +468,7 @@ namespace POE_Task_1
 
 
         }
-        //Instead of having GameEngine, my code runs off the startbutton.
+        
        
 
         private void UpButton_Click(object sender, EventArgs e)
@@ -420,37 +478,7 @@ namespace POE_Task_1
 
         private void StartButton_Click_1(object sender, EventArgs e)
         {
-            tile.Maphelp make = new tile.Maphelp();
-            Random mappy = new Random();
-            int elements = 2;
-            int minw = 5;
-            int maxw = mappy.Next(minw, 20);
-            int minh = 5;
-            int maxh = mappy.Next(minh, 20);
-            make.mapheight = mappy.Next(minh, maxh);
-            make.mapwidth = mappy.Next(minw, maxw);
-
-
-            make.maptiles = make.mapmaking(maxw, minw, minh, maxh, elements);
-            make.create(elements);
-            make.createtiles(elements, elements);
-
-            string mapString = "";
-            for (int i = 0; i < make.maptiles.GetLength(0); i++)
-            {
-                for (int j = 0; j < make.maptiles.GetLength(1); j++)
-                {
-                    mapString += make.maptiles[i, j].ToString();
-                    mapString += " ";
-                }
-
-                mapString += Environment.NewLine;
-            }
-            this.MapLabel.Text = mapString;
-            tile.Character.Hero argumentpass = new tile.Character.Hero();
-            tile.Character.Goblin argumentpass2 = new tile.Character.Goblin();
-            this.CharacterLabel.Text = argumentpass.ToString();
-            this.EnemyLabel.Text = argumentpass2.ToString();
+           
 
 
         }

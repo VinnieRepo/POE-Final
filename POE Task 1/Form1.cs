@@ -455,7 +455,7 @@ namespace POE_Task_1
             ///                        \\\
 
 
-
+            // Item Class\\
             public abstract class Item : tile
             {
                 public Item(int tilex, int tiley, string symbolval, Tiletypes tiletype) : base(tilex, tiley, symbolval, tiletype)
@@ -470,11 +470,12 @@ namespace POE_Task_1
 
                 
             }
-
+            //Gold Class\\
             public class gold : Item
             {
                 public gold(int tilex, int tiley, string symbolval, Tiletypes tiletype) : base(tilex, tiley, symbolval, tiletype)
                 {
+
                 }
 
                 private int GoldAmount;
@@ -485,7 +486,15 @@ namespace POE_Task_1
                     set { GoldAmount = value; }
                 }
 
+                private Random goldrandom = new Random();
 
+                public void goldvalues(int x, int y)
+                {
+                    tilex = x;
+                    tiley = y;
+                    goldamount = goldrandom.Next(1, 5);
+                    
+                }
             }
 
             public class GameEngine

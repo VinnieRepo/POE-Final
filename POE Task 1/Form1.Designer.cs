@@ -29,7 +29,6 @@ namespace POE_Task_1
         /// </summary>
         private void InitializeComponent()
         {
-            this.MapLabel = new System.Windows.Forms.Label();
             this.CharacterLabel = new System.Windows.Forms.Label();
             this.EnemyLabel = new System.Windows.Forms.Label();
             this.StartButton = new System.Windows.Forms.Button();
@@ -37,16 +36,8 @@ namespace POE_Task_1
             this.LeftButton = new System.Windows.Forms.Button();
             this.RightButton = new System.Windows.Forms.Button();
             this.DownButton = new System.Windows.Forms.Button();
+            this.MapLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // MapLabel
-            // 
-            this.MapLabel.AutoSize = true;
-            this.MapLabel.Location = new System.Drawing.Point(72, 54);
-            this.MapLabel.Name = "MapLabel";
-            this.MapLabel.Size = new System.Drawing.Size(50, 20);
-            this.MapLabel.TabIndex = 0;
-            this.MapLabel.Text = "label1";
             // 
             // CharacterLabel
             // 
@@ -84,6 +75,7 @@ namespace POE_Task_1
             this.UpButton.TabIndex = 4;
             this.UpButton.Text = "Up";
             this.UpButton.UseVisualStyleBackColor = true;
+            this.UpButton.Click += new System.EventHandler(this.UpButton_Click_1);
             // 
             // LeftButton
             // 
@@ -111,6 +103,16 @@ namespace POE_Task_1
             this.DownButton.TabIndex = 7;
             this.DownButton.Text = "Down";
             this.DownButton.UseVisualStyleBackColor = true;
+            // 
+            // MapLabel
+            // 
+            this.MapLabel.AutoSize = true;
+            this.MapLabel.Location = new System.Drawing.Point(12, 41);
+            this.MapLabel.Name = "MapLabel";
+            this.MapLabel.Size = new System.Drawing.Size(50, 20);
+            this.MapLabel.TabIndex = 0;
+            this.MapLabel.Text = "label1";
+            this.MapLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // Form1
             // 

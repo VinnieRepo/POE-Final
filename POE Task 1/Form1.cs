@@ -310,7 +310,7 @@ namespace POE_Task_1
 
             Random mappy = new Random();
 
-            // Mapfiller
+          
 
 
             private tile[,] mapcell;
@@ -353,8 +353,22 @@ namespace POE_Task_1
                 get { return Enemyguy; }
                 set { Enemyguy = value; }
             }
+            //Item Array and Gold for Task 2\\
+            private Item[] Itemholder;
+            public  Item[] itemholder
+            {
+                get { return Itemholder; }
+                set { Itemholder = value; }
+            }
 
-            public Map(int enemycount, int minheight, int maxheight, int minwidth, int maxwidth)
+            private int GoldAmount;
+            public int goldamount
+            {
+                get { return GoldAmount; }
+                set { GoldAmount = value; }
+            }
+
+            public Map(int enemycount, int minheight, int maxheight, int minwidth, int maxwidth,int goldam)
             {
 
 
@@ -365,7 +379,11 @@ namespace POE_Task_1
                 Mapcell = new tile[mapwidth, mapheight];
                 enemies = new List<Enemy>();
 
-                mapmaking(enemycount);
+                goldamount = goldam;
+                
+
+
+                mapmaking(enemycount,goldamount);
 
 
 
@@ -413,15 +431,59 @@ namespace POE_Task_1
                             Enemyx = mappy.Next(0, mapwidth);
                             Enemyy = mappy.Next(0, mapheight);
                         }
-                        Goblin NewEnemy = new Goblin(Enemyx, Enemyy, "G", Tiletype, 10, 10, 1);
-                        enemycount.Add(NewEnemy);
-                        enemyguy = NewEnemy;
-                        Mapcell[Enemyx, Enemyy] = NewEnemy;
+
+                        // New Randomized enemy for Task 2\\
+                        int enemtype = mappy.Next(0, 3);
+                        if (enemtype == 2)
+                        {
+                            Mage NewMage = new Mage(Enemyx, Enemyy, "M", Tiletype, 15, 15, 5);
+                            enemies.Add(NewMage);
+                            enemyguy = NewMage;
+                            Mapcell[Enemyx, Enemyy] = NewMage;
+                             enemtype = mappy.Next(1, 2);
+                        }
+
+
+                        else if (enemtype == 1)
+                        {
+                            Goblin NewEnemy = new Goblin(Enemyx, Enemyy, "G", Tiletype, 10, 10, 1);
+                            enemies.Add(NewEnemy);
+                            enemyguy = NewEnemy;
+                            Mapcell[Enemyx, Enemyy] = NewEnemy;
+                            enemtype = mappy.Next(1, 3);
+                        }
+
+                        else enemtype = mappy.Next(1, 3);
+
+
+
+
 
                         break;
 
 
                     case tile.Tiletypes.Gold:
+
+                        int goldx = mappy.Next(0, mapwidth);
+                        int goldy = mappy.Next(0, mapheight);
+
+                        while (Mapcell[goldx, goldy].tiletype != tile.Tiletypes.Empty)
+                        {
+                            goldx = mappy.Next(0, mapwidth);
+                            goldy = mappy.Next(0, mapheight);
+                        }
+
+                        gold Gold = new gold(goldx, goldy, "O", Tiletype);
+                        Mapcell[goldx, goldy] = Gold;
+
+
+
+
+
+
+
+
+
                         break;
 
                 }
@@ -435,21 +497,21 @@ namespace POE_Task_1
                     for (int x = 0; x < Mapwidth; x++)
                     {
                         MapString += Mapcell[x, y].symbolval;
-
+                        
                     }
-                    MapString += "\n";
+                    MapString += System.Environment.NewLine;
                 }
                 return MapString;
             }
 
-            void mapmaking(int EnemyNumb)
+            void mapmaking(int EnemyNumb, int Goldy)
             {
 
                 for (int y = 0; y < Mapheight; y++)
                 {
-                    for (int x = 0; x < Mapwidth; x++)
+                    for (int x = 0; x < Mapwidth ; x++)
                     {
-                        if (x == 0 || x == Mapwidth || y == 0 || y == Mapheight - 1)
+                        if (x == 0 || x == Mapwidth|| y == 0 || y == Mapheight - 1)
                         {
                             Create(tile.Tiletypes.Barrier, x, y);
                         }
@@ -466,6 +528,12 @@ namespace POE_Task_1
                 for (int e = 0; e < EnemyNumb; e++)
                 {
                     Create(tile.Tiletypes.Enemy);
+                }
+
+
+                for (int g = 0; g < Goldy ; g++)
+                {
+                    Create(tile.Tiletypes.Gold);
                 }
             }
 
@@ -522,8 +590,8 @@ namespace POE_Task_1
                 int Magey;
                 public Mage(int tilex, int tiley, string symbolval, Tiletypes tiletype, int hp, int maxhp, int damage) : base(tilex, tiley, symbolval, tiletype, hp, maxhp, damage)
                 {
-                    tilex = Magex;
-                    tiley = Magey;
+                    Magex = tilex;
+                    Magey = tiley;
                 }
                 public override Movement returnmove(Movement move = Movement.Up)
                 {
@@ -548,7 +616,10 @@ namespace POE_Task_1
 
                     
                 }
+
             }
+
+
 
 
 
@@ -564,7 +635,7 @@ namespace POE_Task_1
 
                 public GameEngine()
                 {
-                    Gamemap = new Map(5, 10, 10, 10, 10);
+                    Gamemap = new Map(5, 10, 10, 10, 10, 5);
                 }
 
 
@@ -578,11 +649,8 @@ namespace POE_Task_1
 
                             Gamemap.Mapcell[Gamemap.Playerguy.tiley - 1, Gamemap.Playerguy.tilex] = Gamemap.Playerguy;
 
-
-
-
-
                             break;
+
                         case tile.Movement.Down:
                             
                             Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex].symbolval = " ";
@@ -596,6 +664,7 @@ namespace POE_Task_1
 
                             Gamemap.Mapcell[Gamemap.Playerguy.tiley , Gamemap.Playerguy.tilex-1] = Gamemap.Playerguy;
                             break;
+
                         case tile.Movement.Right:
                             
                             Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex].symbolval = " ";
@@ -617,7 +686,7 @@ namespace POE_Task_1
         
         private void StartButton_Click(object sender, EventArgs e)
         {
-            MapLabel.Text = Start.Gamemap.ToString();
+            MapHolderBox.Text = Start.Gamemap.ToString();
             CharacterLabel.Text = Start.Gamemap.Playerguy.ToString();
             EnemyLabel.Text = Start.Gamemap.enemyguy.ToString();
         }

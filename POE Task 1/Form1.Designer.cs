@@ -37,6 +37,7 @@ namespace POE_Task_1
             this.RightButton = new System.Windows.Forms.Button();
             this.DownButton = new System.Windows.Forms.Button();
             this.MapLabel = new System.Windows.Forms.Label();
+            this.MapHolderBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // CharacterLabel
@@ -115,11 +116,22 @@ namespace POE_Task_1
             this.MapLabel.Text = "label1";
             this.MapLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // MapHolderBox
+            // 
+            this.MapHolderBox.Location = new System.Drawing.Point(12, 23);
+            this.MapHolderBox.MinimumSize = new System.Drawing.Size(30, 30);
+            this.MapHolderBox.Multiline = true;
+            this.MapHolderBox.Name = "MapHolderBox";
+            this.MapHolderBox.ReadOnly = true;
+            this.MapHolderBox.Size = new System.Drawing.Size(287, 255);
+            this.MapHolderBox.TabIndex = 10;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.MapHolderBox);
             this.Controls.Add(this.DownButton);
             this.Controls.Add(this.RightButton);
             this.Controls.Add(this.LeftButton);
@@ -147,6 +159,7 @@ namespace POE_Task_1
         private System.Windows.Forms.Button RightButton;
         private System.Windows.Forms.Button DownButton;
         private System.Windows.Forms.Label MapLabel;
+        private System.Windows.Forms.TextBox MapHolderBox;
     }
 }
 

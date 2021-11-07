@@ -23,7 +23,7 @@ namespace POE_Task_1
 
 
 
-
+        
 
 
         private void Form1_Load(object sender, EventArgs e)
@@ -98,8 +98,8 @@ namespace POE_Task_1
                 this.symbolval = symbolval;
                 this.tiletype = tiletype;
             }
-        }
 
+        }
 
 
         // Default values class
@@ -205,7 +205,7 @@ namespace POE_Task_1
 
             }
             //Range check
-            private bool CheckRange(int target, int charpos)
+            public bool CheckRange(int target, int charpos)
             {
                 int distance = distanceto(target, charpos);
                 if (distance <= 1)
@@ -235,11 +235,15 @@ namespace POE_Task_1
                 this.hp = hp;
                 this.maxhp = maxhp;
 
+
+
             }
+            public abstract bool CheckingRange(int target, int charpos);
+            
 
-            //Enemy Constructor
 
-           
+
+
             public override string ToString()
             {
                 string Stats = GetType().Name + "\n";
@@ -265,6 +269,20 @@ namespace POE_Task_1
                 int num = r.Next(4);
                 return (Movement)num;
             }
+            public override bool CheckingRange(int target, int charpos)
+            {
+                int distance = target = charpos;
+                if (distance <= 1)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+
         }
         //Hero Subclass
         public class Hero : Character
@@ -381,7 +399,7 @@ namespace POE_Task_1
                             Heroy = mappy.Next(0, mapheight);
                         }
 
-                        Hero NewHero = new Hero(Herox, Heroy, "H", Tiletype, 100, 100, 10);
+                        Hero NewHero = new Hero(Herox, Heroy, "H", Tiletype, 10, 10, 10);
                         playerguy = NewHero;
                         Mapcell[Herox, Heroy] = NewHero;
                         break;
@@ -395,7 +413,7 @@ namespace POE_Task_1
                             Enemyx = mappy.Next(0, mapwidth);
                             Enemyy = mappy.Next(0, mapheight);
                         }
-                        Goblin NewEnemy = new Goblin(Enemyx, Enemyy, "G", Tiletype, 100, 100, 10);
+                        Goblin NewEnemy = new Goblin(Enemyx, Enemyy, "G", Tiletype, 10, 10, 1);
                         enemycount.Add(NewEnemy);
                         enemyguy = NewEnemy;
                         Mapcell[Enemyx, Enemyy] = NewEnemy;
@@ -463,12 +481,13 @@ namespace POE_Task_1
                 }
 
                 public override string ToString()
-                {    string thisItem = symbolval; 
+                {
+                    string thisItem = symbolval;
                     return thisItem;
                 }
-                
 
-                
+
+
             }
             //Gold Class\\
             public class gold : Item
@@ -493,76 +512,139 @@ namespace POE_Task_1
                     tilex = x;
                     tiley = y;
                     goldamount = goldrandom.Next(1, 5);
+
+                }
+            }
+
+            public class Mage : Enemy
+            {
+                int Magex;
+                int Magey;
+                public Mage(int tilex, int tiley, string symbolval, Tiletypes tiletype, int hp, int maxhp, int damage) : base(tilex, tiley, symbolval, tiletype, hp, maxhp, damage)
+                {
+                    tilex = Magex;
+                    tiley = Magey;
+                }
+                public override Movement returnmove(Movement move = Movement.Up)
+                {
+                    
+                    int num = 5;
+                    return (Movement)num;
+                }
+
+                public override bool CheckingRange(int targetx, int targety)
+                {
+                    if (targetx == Magex + 1 || targety == Magey + 1 || targetx == Magex - 1 || targety == Magey - 1)
+                    {
+                        return true;
+                    }
+                    else if (targetx == Magex + 1 && targety == Magey + 1 || targetx == Magex - 1 && targety == Magey - 1 || targetx == Magex - 1 && targety == Magey + 1 || targetx == Magex + 1 && targety == Magey - 1)
+                    {
+                        return true;
+                    }
+
+                    else return false;
+                            
+
                     
                 }
             }
 
+
+
             public class GameEngine
-        {
-            private Map gamemap;
-
-            public Map Gamemap
             {
-                get { return gamemap; }
-                set { gamemap = value; }
-            }
+                private Map gamemap;
 
-            public GameEngine()
-            {
-                Gamemap = new Map(5, 10, 10, 10, 10);
-            }
-
-
-            public void CharacterMove(tile.Movement direction)
-            {
-
-                switch (direction)
+                public Map Gamemap
                 {
-                    case tile.Movement.Up:
-                        Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex].symbolval = " ";
-
-                        Gamemap.Mapcell[Gamemap.Playerguy.tiley - 1, Gamemap.Playerguy.tilex] = Gamemap.Playerguy;
-                        
-
-
-
-
-                        break;
-                    case tile.Movement.Down:
-                        Gamemap.Playerguy.tiley = Gamemap.Playerguy.tiley + 1;
-                        break;
-                    case tile.Movement.Left:
-                        Gamemap.Playerguy.tilex = Gamemap.Playerguy.tilex - 1;
-                        break;
-                    case tile.Movement.Right:
-                        Gamemap.Playerguy.tilex = Gamemap.Playerguy.tilex + 1;
-                        break;
-
+                    get { return gamemap; }
+                    set { gamemap = value; }
                 }
 
+                public GameEngine()
+                {
+                    Gamemap = new Map(5, 10, 10, 10, 10);
+                }
+
+
+                public void CharacterMove(tile.Movement direction)
+                {
+
+                    switch (direction)
+                    {
+                        case tile.Movement.Up:
+                            Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex].symbolval = " ";
+
+                            Gamemap.Mapcell[Gamemap.Playerguy.tiley - 1, Gamemap.Playerguy.tilex] = Gamemap.Playerguy;
+
+
+
+
+
+                            break;
+                        case tile.Movement.Down:
+                            
+                            Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex].symbolval = " ";
+
+                            Gamemap.Mapcell[Gamemap.Playerguy.tiley + 1, Gamemap.Playerguy.tilex] = Gamemap.Playerguy;
+                            break;
+
+                        case tile.Movement.Left:
+                          
+                            Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex].symbolval = " ";
+
+                            Gamemap.Mapcell[Gamemap.Playerguy.tiley , Gamemap.Playerguy.tilex-1] = Gamemap.Playerguy;
+                            break;
+                        case tile.Movement.Right:
+                            
+                            Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex].symbolval = " ";
+
+                            Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex + 1] = Gamemap.Playerguy;
+                            break;
+
+                    }
+
+                }
             }
+
+            
         }
+        Map.GameEngine Start = new Map.GameEngine();
 
-        GameEngine Start = new GameEngine();
+      
 
-        private void StartButton_Click_1(object sender, EventArgs e)
+        
+        private void StartButton_Click(object sender, EventArgs e)
         {
-
-            
-            
             MapLabel.Text = Start.Gamemap.ToString();
             CharacterLabel.Text = Start.Gamemap.Playerguy.ToString();
             EnemyLabel.Text = Start.Gamemap.enemyguy.ToString();
-           
-
-
         }
 
-        private void UpButton_Click_1(object sender, EventArgs e)
-        {   
-           
+        private void UpButton_Click(object sender, EventArgs e)
+        {
             Start.CharacterMove(tile.Movement.Up);
             MapLabel.Text = Start.Gamemap.ToString();
 
         }
-    } }
+
+        private void RightButton_Click(object sender, EventArgs e)
+        {
+            Start.CharacterMove(tile.Movement.Right);
+            MapLabel.Text = Start.Gamemap.ToString();
+        }
+
+        private void DownButton_Click(object sender, EventArgs e)
+        {
+            Start.CharacterMove(tile.Movement.Down);
+            MapLabel.Text = Start.Gamemap.ToString();
+        }
+
+        private void LeftButton_Click(object sender, EventArgs e)
+        {
+            Start.CharacterMove(tile.Movement.Left);
+            MapLabel.Text = Start.Gamemap.ToString();
+        }
+    }
+}

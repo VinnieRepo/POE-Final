@@ -59,23 +59,21 @@ namespace POE_Task_1
             // 
             // StartButton
             // 
-            this.StartButton.Location = new System.Drawing.Point(57, 353);
+            this.StartButton.Location = new System.Drawing.Point(32, 329);
             this.StartButton.Name = "StartButton";
-            this.StartButton.Size = new System.Drawing.Size(165, 66);
-            this.StartButton.TabIndex = 3;
+            this.StartButton.Size = new System.Drawing.Size(182, 59);
+            this.StartButton.TabIndex = 9;
             this.StartButton.Text = "Start";
-            this.StartButton.UseVisualStyleBackColor = true;
-            this.StartButton.Click += new System.EventHandler(this.StartButton_Click_1);
+            this.StartButton.Click += new System.EventHandler(this.StartButton_Click);
             // 
             // UpButton
             // 
-            this.UpButton.Location = new System.Drawing.Point(582, 297);
+            this.UpButton.Location = new System.Drawing.Point(582, 308);
             this.UpButton.Name = "UpButton";
             this.UpButton.Size = new System.Drawing.Size(94, 29);
-            this.UpButton.TabIndex = 4;
+            this.UpButton.TabIndex = 8;
             this.UpButton.Text = "Up";
-            this.UpButton.UseVisualStyleBackColor = true;
-            this.UpButton.Click += new System.EventHandler(this.UpButton_Click_1);
+            this.UpButton.Click += new System.EventHandler(this.UpButton_Click);
             // 
             // LeftButton
             // 
@@ -85,6 +83,7 @@ namespace POE_Task_1
             this.LeftButton.TabIndex = 5;
             this.LeftButton.Text = "Left";
             this.LeftButton.UseVisualStyleBackColor = true;
+            this.LeftButton.Click += new System.EventHandler(this.LeftButton_Click);
             // 
             // RightButton
             // 
@@ -94,6 +93,7 @@ namespace POE_Task_1
             this.RightButton.TabIndex = 6;
             this.RightButton.Text = "Right";
             this.RightButton.UseVisualStyleBackColor = true;
+            this.RightButton.Click += new System.EventHandler(this.RightButton_Click);
             // 
             // DownButton
             // 
@@ -103,6 +103,7 @@ namespace POE_Task_1
             this.DownButton.TabIndex = 7;
             this.DownButton.Text = "Down";
             this.DownButton.UseVisualStyleBackColor = true;
+            this.DownButton.Click += new System.EventHandler(this.DownButton_Click);
             // 
             // MapLabel
             // 

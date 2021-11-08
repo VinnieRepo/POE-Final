@@ -149,6 +149,12 @@ namespace POE_Task_1
                 set { Damage = value; }
             }
 
+            private int Goldpurse;
+            public int goldpurse
+            {
+                get { return Goldpurse; }
+                set { Goldpurse = value; }
+            }
 
             private List<tile> vision;
 
@@ -225,6 +231,14 @@ namespace POE_Task_1
 
             //Tostring to be overridden.
             public abstract override string ToString();
+           
+            public void pickupitem (char i)
+            {
+                if(i == 'g')
+                {
+                    
+                }
+            }
         }
         //Enemy Class
         public abstract class Enemy : Character
@@ -484,6 +498,7 @@ namespace POE_Task_1
 
 
 
+
                         break;
 
                 }
@@ -581,9 +596,10 @@ namespace POE_Task_1
                     tiley = y;
                     goldamount = goldrandom.Next(1, 5);
 
+
                 }
             }
-
+            // Mage Enemy Class\\
             public class Mage : Enemy
             {
                 int Magex;

@@ -264,8 +264,8 @@ namespace POE_Task_1
             {
                 string Stats = GetType().Name + "\n";
                 Stats += "at [" + tilex.ToString() + "," + tiley.ToString() + "] \n";
-                Stats += HP.ToString() + "HP \n;";
-                Stats += "{" + Damage.ToString() + "}";
+                Stats += HP.ToString() + "HP \n";
+                Stats += "Damage:{" + Damage.ToString() + "}";
                 return Stats;
             }
 
@@ -305,6 +305,7 @@ namespace POE_Task_1
         {
             public Hero(int tilex, int tiley, string symbolval, Tiletypes tiletype, int hp, int maxhp, int damage) : base(tilex, tiley, symbolval, tiletype, hp, maxhp, damage)
             {
+                goldpurse = 0;
             }
 
             //Movement
@@ -316,7 +317,7 @@ namespace POE_Task_1
             public override string ToString()
             {
                 return "Player Stats \r\n"
-                    + "HP: " + HP + "/" + MAXHP + "\r\n" + "Damage:" + "(" + Damage + ")\r\n" + "[" + tilex + ',' + tiley + "]";
+                    + "HP: " + HP + "/" + MAXHP + "\r\n" + "Damage:" + "(" + Damage + ")\r\n" + "[" + tilex + ',' + tiley + "]" +"\r\n"+"Gold Amount:"+ goldpurse;
             }
         }
         //Attempt at the map creating class, this is where i hit my snag.
@@ -677,7 +678,7 @@ namespace POE_Task_1
                 public void CharacterMove(tile.Movement direction)
                 {
                     
-
+                    // Updated Movement for Gold Aqusition
                     switch (direction)
                     {
                         case tile.Movement.Up:
@@ -685,7 +686,7 @@ namespace POE_Task_1
                             if (Gamemap.Mapcell[Gamemap.Playerguy.tiley - 1, Gamemap.Playerguy.tilex].symbolval == "O")
                             {
                                 Gamemap.GetItemAtPosition(Gamemap.Playerguy.tiley - 1, Gamemap.Playerguy.tilex);
-                                Gamemap.Playerguy.pickupitem('g')
+                                Gamemap.Playerguy.pickupitem('g');
                             }
 
                                 Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex].symbolval = " ";
@@ -697,21 +698,38 @@ namespace POE_Task_1
                             break;
 
                         case tile.Movement.Down:
-                            
-                            Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex].symbolval = " ";
+                            if (Gamemap.Mapcell[Gamemap.Playerguy.tiley +1 , Gamemap.Playerguy.tilex].symbolval == "O")
+                            {
+                                Gamemap.GetItemAtPosition(Gamemap.Playerguy.tiley +1, Gamemap.Playerguy.tilex);
+                                Gamemap.Playerguy.pickupitem('g');
+                            }
 
+                            Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex].symbolval = " ";
                             Gamemap.Mapcell[Gamemap.Playerguy.tiley + 1, Gamemap.Playerguy.tilex] = Gamemap.Playerguy;
+
+
                             break;
 
                         case tile.Movement.Left:
-                          
+                            if (Gamemap.Mapcell[Gamemap.Playerguy.tiley , Gamemap.Playerguy.tilex - 1].symbolval == "O")
+                            {
+                                Gamemap.GetItemAtPosition(Gamemap.Playerguy.tiley , Gamemap.Playerguy.tilex - 1);
+                                Gamemap.Playerguy.pickupitem('g');
+                            }
+
                             Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex].symbolval = " ";
 
                             Gamemap.Mapcell[Gamemap.Playerguy.tiley , Gamemap.Playerguy.tilex-1] = Gamemap.Playerguy;
                             break;
 
                         case tile.Movement.Right:
-                            
+
+                            if (Gamemap.Mapcell[Gamemap.Playerguy.tiley , Gamemap.Playerguy.tilex + 1 ].symbolval == "O")
+                            {
+                                Gamemap.GetItemAtPosition(Gamemap.Playerguy.tiley , Gamemap.Playerguy.tilex + 1);
+                                Gamemap.Playerguy.pickupitem('g');
+                            }
+
                             Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex].symbolval = " ";
 
                             Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex + 1] = Gamemap.Playerguy;

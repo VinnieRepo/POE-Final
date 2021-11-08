@@ -148,7 +148,7 @@ namespace POE_Task_1
                 get { return Damage; }
                 set { Damage = value; }
             }
-
+            // Task 2 Gold Purse and Constuctor
             private int Goldpurse;
             public int goldpurse
             {
@@ -231,12 +231,14 @@ namespace POE_Task_1
 
             //Tostring to be overridden.
             public abstract override string ToString();
-           
+           // Task 2 Pickup Item Class
             public void pickupitem (char i)
             {
                 if(i == 'g')
                 {
-                    
+                    Random GoldAmount = new Random();
+                    int amount = GoldAmount.Next(1, 100);
+                    goldpurse = goldpurse + amount;
                 }
             }
         }
@@ -552,6 +554,8 @@ namespace POE_Task_1
                 }
             }
 
+
+
             ///  New Task 2 Functions  \\\
             ///                        \\\
 
@@ -559,15 +563,22 @@ namespace POE_Task_1
             // Item Class\\
             public abstract class Item : tile
             {
+                private List<Item> itemsarray;
+                public List<Item> ItemsArray
+                {
+                    get { return itemsarray; ; }
+                    set { itemsarray = value; }
+                }
                 public Item(int tilex, int tiley, string symbolval, Tiletypes tiletype) : base(tilex, tiley, symbolval, tiletype)
                 {
                 }
-
+                
                 public override string ToString()
                 {
                     string thisItem = symbolval;
                     return thisItem;
                 }
+
 
 
 
@@ -636,6 +647,14 @@ namespace POE_Task_1
             }
 
 
+            public string GetItemAtPosition(int x, int y)
+            {
+                if (Mapcell[x, y].symbolval == "O" || Mapcell[x, y].symbolval == "I")
+                {
+                    return "Item";
+                }
+                else return null;
+            }
 
 
 
@@ -657,13 +676,23 @@ namespace POE_Task_1
 
                 public void CharacterMove(tile.Movement direction)
                 {
+                    
 
                     switch (direction)
                     {
                         case tile.Movement.Up:
-                            Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex].symbolval = " ";
+
+                            if (Gamemap.Mapcell[Gamemap.Playerguy.tiley - 1, Gamemap.Playerguy.tilex].symbolval == "O")
+                            {
+                                Gamemap.GetItemAtPosition(Gamemap.Playerguy.tiley - 1, Gamemap.Playerguy.tilex);
+                                Gamemap.Playerguy.pickupitem('g')
+                            }
+
+                                Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex].symbolval = " ";
 
                             Gamemap.Mapcell[Gamemap.Playerguy.tiley - 1, Gamemap.Playerguy.tilex] = Gamemap.Playerguy;
+
+                           
 
                             break;
 

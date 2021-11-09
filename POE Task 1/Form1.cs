@@ -7,12 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace POE_Task_1
 {
-
+ 
     public partial class Form1 : Form
-    {   //Base Class for Tiles
+    {   
 
 
 
@@ -32,7 +34,7 @@ namespace POE_Task_1
 
 
         }
-
+        [Serializable]
         public abstract class tile
 
 
@@ -103,7 +105,7 @@ namespace POE_Task_1
 
 
         // Default values class
-
+        [Serializable]
         public class defaults : tile
         {
             public defaults(int tilex, int tiley, string symbolval, Tiletypes tiletype) : base(tilex, tiley, symbolval, tiletype)
@@ -113,6 +115,7 @@ namespace POE_Task_1
 
         }
         //Obstacles Classs
+        [Serializable]
         public class obstacles : defaults
         {
             public obstacles(int tilex, int tiley, string symbolval, Tiletypes tiletype) : base(tilex, tiley, symbolval, tiletype)
@@ -121,6 +124,7 @@ namespace POE_Task_1
         }
 
         // Empty Tiles class.
+        [Serializable]
         public class emptyTiles : defaults
         {
             public emptyTiles(int tilex, int tiley, string symbolval, Tiletypes tiletype) : base(tilex, tiley, symbolval, tiletype)
@@ -128,6 +132,7 @@ namespace POE_Task_1
             }
         }
         // Base class for characters
+        [Serializable]
         public abstract class Character : tile
         {
             protected int HP;
@@ -243,6 +248,7 @@ namespace POE_Task_1
             }
         }
         //Enemy Class
+        [Serializable]
         public abstract class Enemy : Character
         {
             protected Enemy(int tilex, int tiley, string symbolval, Tiletypes tiletype, int hp, int maxhp, int damage) : base(tilex, tiley, symbolval, tiletype, hp, maxhp, damage)
@@ -272,6 +278,7 @@ namespace POE_Task_1
 
         }
         // Goblin Subclass
+        [Serializable]
         public class Goblin : Enemy
         {    //Constructor
             public Goblin(int tilex, int tiley, string symbolval, Tiletypes tiletype, int hp, int maxhp, int damage) : base(tilex, tiley, symbolval, tiletype, hp, maxhp, damage)
@@ -301,6 +308,7 @@ namespace POE_Task_1
 
         }
         //Hero Subclass
+        [Serializable]
         public class Hero : Character
         {
             public Hero(int tilex, int tiley, string symbolval, Tiletypes tiletype, int hp, int maxhp, int damage) : base(tilex, tiley, symbolval, tiletype, hp, maxhp, damage)
@@ -320,12 +328,13 @@ namespace POE_Task_1
                     + "HP: " + HP + "/" + MAXHP + "\r\n" + "Damage:" + "(" + Damage + ")\r\n" + "[" + tilex + ',' + tiley + "]" +"\r\n"+"Gold Amount:"+ goldpurse;
             }
         }
-        //Attempt at the map creating class, this is where i hit my snag.
+        
+        [Serializable]
         public class Map
         {
 
 
-            Random mappy = new Random();
+            
 
           
 
@@ -389,7 +398,7 @@ namespace POE_Task_1
             {
 
 
-
+                Random mappy = new Random();
 
                 Mapheight = mappy.Next(minheight, maxheight);
                 Mapwidth = mappy.Next(minwidth, maxwidth);
@@ -410,6 +419,7 @@ namespace POE_Task_1
 
             void Create(tile.Tiletypes Tiletype, int x = 0, int y = 0)
             {
+                Random mappy = new Random();
                 switch (Tiletype)
                 {
                     case tile.Tiletypes.Barrier:
@@ -562,6 +572,7 @@ namespace POE_Task_1
 
 
             // Item Class\\
+            [Serializable]
             public abstract class Item : tile
             {
                 private List<Item> itemsarray;
@@ -585,6 +596,7 @@ namespace POE_Task_1
 
             }
             //Gold Class\\
+            [Serializable]
             public class gold : Item
             {
                 public gold(int tilex, int tiley, string symbolval, Tiletypes tiletype) : base(tilex, tiley, symbolval, tiletype)
@@ -612,6 +624,7 @@ namespace POE_Task_1
                 }
             }
             // Mage Enemy Class\\
+            [Serializable]
             public class Mage : Enemy
             {
                 int Magex;
@@ -658,7 +671,7 @@ namespace POE_Task_1
             }
 
 
-
+            [Serializable]
             public class GameEngine
             {
                 private Map gamemap;
@@ -674,7 +687,7 @@ namespace POE_Task_1
                     Gamemap = new Map(5, 10, 10, 10, 10, 5);
                 }
 
-
+             
                 public void CharacterMove(tile.Movement direction)
                 {
                     
@@ -777,6 +790,63 @@ namespace POE_Task_1
         {
             Start.CharacterMove(tile.Movement.Left);
             MapLabel.Text = Start.Gamemap.ToString();
+        }
+
+        // saveSystem try, it keeps snagging because it cant save a random rumber.
+        public static class saveSystem
+        {
+            public static void SaveEverything(Map.GameEngine Savings)
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+                string path = @"C:\Users\rampa\OneDrive\Documents" + "/Saves.sav";
+                FileStream stream = new FileStream(path,FileMode.Create);
+
+                Map.GameEngine data = new Map.GameEngine();
+
+                formatter.Serialize(stream, data);
+                stream.Close();
+
+                
+                
+            }
+
+            public static Map.GameEngine LoadData()
+            {
+                string path = @"C:\Users\rampa\OneDrive\Documents" + "/Saves.sav";
+                if (File.Exists(path))
+                {
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    FileStream stream = new FileStream(path, FileMode.Open);
+
+                    Map.GameEngine savings = formatter.Deserialize(stream) as Map.GameEngine;
+                    stream.Close();
+                    return savings;
+
+                }
+                else
+                {
+                    System.Windows.Forms.MessageBox.Show("No Save file detected in"+path);
+                    return null;
+                }
+            }
+
+        }
+        private void SaveButton_Click(object sender, EventArgs e)
+        {    
+            saveSystem.SaveEverything(Start);
+        }
+
+        private void LoadButton_Click(object sender, EventArgs e)
+        {
+            Map.GameEngine data = saveSystem.LoadData();
+
+            Start.Gamemap.Mapcell = data.Gamemap.Mapcell;
+
+            MapHolderBox.Text = Start.Gamemap.ToString();
+            CharacterLabel.Text = Start.Gamemap.Playerguy.ToString();
+            EnemyLabel.Text = Start.Gamemap.enemyguy.ToString();
+
+
         }
     }
 }

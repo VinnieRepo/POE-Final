@@ -38,6 +38,8 @@ namespace POE_Task_1
             this.DownButton = new System.Windows.Forms.Button();
             this.MapLabel = new System.Windows.Forms.Label();
             this.MapHolderBox = new System.Windows.Forms.TextBox();
+            this.SaveButton = new System.Windows.Forms.Button();
+            this.LoadButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // CharacterLabel
@@ -126,11 +128,33 @@ namespace POE_Task_1
             this.MapHolderBox.Size = new System.Drawing.Size(287, 255);
             this.MapHolderBox.TabIndex = 10;
             // 
+            // SaveButton
+            // 
+            this.SaveButton.Location = new System.Drawing.Point(550, 52);
+            this.SaveButton.Name = "SaveButton";
+            this.SaveButton.Size = new System.Drawing.Size(126, 61);
+            this.SaveButton.TabIndex = 11;
+            this.SaveButton.Text = "Save";
+            this.SaveButton.UseVisualStyleBackColor = true;
+            this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
+            // 
+            // LoadButton
+            // 
+            this.LoadButton.Location = new System.Drawing.Point(550, 162);
+            this.LoadButton.Name = "LoadButton";
+            this.LoadButton.Size = new System.Drawing.Size(126, 61);
+            this.LoadButton.TabIndex = 12;
+            this.LoadButton.Text = "Load";
+            this.LoadButton.UseVisualStyleBackColor = true;
+            this.LoadButton.Click += new System.EventHandler(this.LoadButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.LoadButton);
+            this.Controls.Add(this.SaveButton);
             this.Controls.Add(this.MapHolderBox);
             this.Controls.Add(this.DownButton);
             this.Controls.Add(this.RightButton);
@@ -160,6 +184,8 @@ namespace POE_Task_1
         private System.Windows.Forms.Button DownButton;
         private System.Windows.Forms.Label MapLabel;
         private System.Windows.Forms.TextBox MapHolderBox;
+        private System.Windows.Forms.Button SaveButton;
+        private System.Windows.Forms.Button LoadButton;
     }
 }
 

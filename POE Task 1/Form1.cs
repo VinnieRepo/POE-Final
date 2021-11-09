@@ -641,6 +641,7 @@ namespace POE_Task_1
                     return (Movement)num;
                 }
 
+                //Mage range check for all 8 Directions
                 public override bool CheckingRange(int targetx, int targety)
                 {
                     if (targetx == Magex + 1 || targety == Magey + 1 || targetx == Magex - 1 || targety == Magey - 1)
@@ -660,7 +661,7 @@ namespace POE_Task_1
 
             }
 
-
+            //Item Position Check
             public string GetItemAtPosition(int x, int y)
             {
                 if (Mapcell[x, y].symbolval == "O" || Mapcell[x, y].symbolval == "I")

@@ -688,7 +688,47 @@ namespace POE_Task_1
                     Gamemap = new Map(5, 10, 10, 10, 10, 5);
                 }
 
-             
+                public void Enemymove()
+                {
+                    Random randomizer = new Random();
+
+                    int whichway = randomizer.Next(1, 5);
+
+                    switch (whichway)
+                    {
+                        case 1:
+                            Gamemap.Mapcell[Gamemap.Enemyguy.tiley, Gamemap.Enemyguy.tilex].symbolval = " ";
+
+                            Gamemap.Mapcell[Gamemap.Enemyguy.tiley - 1, Gamemap.Enemyguy.tilex] = Gamemap.Enemyguy;
+
+                            break;
+
+                        case 2:
+                            Gamemap.Mapcell[Gamemap.Enemyguy.tiley, Gamemap.Enemyguy.tilex].symbolval = " ";
+
+                            Gamemap.Mapcell[Gamemap.Enemyguy.tiley + 1, Gamemap.Enemyguy.tilex] = Gamemap.Enemyguy;
+
+                            break;
+
+                        case 3:
+                            Gamemap.Mapcell[Gamemap.Enemyguy.tiley, Gamemap.Enemyguy.tilex].symbolval = " ";
+
+                            Gamemap.Mapcell[Gamemap.Enemyguy.tiley , Gamemap.Enemyguy.tilex - 1] = Gamemap.Enemyguy;
+
+                            break;
+
+                        case 4:
+                            Gamemap.Mapcell[Gamemap.Enemyguy.tiley, Gamemap.Enemyguy.tilex].symbolval = " ";
+
+                            Gamemap.Mapcell[Gamemap.Enemyguy.tiley , Gamemap.Enemyguy.tilex + 1] = Gamemap.Enemyguy;
+
+                            break;
+
+
+                    }
+
+                    
+                }
                 public void CharacterMove(tile.Movement direction)
                 {
                     
@@ -701,52 +741,81 @@ namespace POE_Task_1
                             {
                                 Gamemap.GetItemAtPosition(Gamemap.Playerguy.tiley - 1, Gamemap.Playerguy.tilex);
                                 Gamemap.Playerguy.pickupitem('g');
-                            }
 
                                 Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex].symbolval = " ";
 
-                            Gamemap.Mapcell[Gamemap.Playerguy.tiley - 1, Gamemap.Playerguy.tilex] = Gamemap.Playerguy;
+                                Gamemap.Mapcell[Gamemap.Playerguy.tiley - 1, Gamemap.Playerguy.tilex] = Gamemap.Playerguy;
+                            }
+                            else
+                            {
+                                Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex].symbolval = " ";
+
+                                Gamemap.Mapcell[Gamemap.Playerguy.tiley - 1, Gamemap.Playerguy.tilex] = Gamemap.Playerguy;
+                            }
+                            
 
                            
 
                             break;
 
                         case tile.Movement.Down:
-                            if (Gamemap.Mapcell[Gamemap.Playerguy.tiley +1 , Gamemap.Playerguy.tilex].symbolval == "O")
+                            if (Gamemap.Mapcell[Gamemap.Playerguy.tiley + 1, Gamemap.Playerguy.tilex].symbolval == "O")
                             {
-                                Gamemap.GetItemAtPosition(Gamemap.Playerguy.tiley +1, Gamemap.Playerguy.tilex);
+                                Gamemap.GetItemAtPosition(Gamemap.Playerguy.tiley + 1, Gamemap.Playerguy.tilex);
                                 Gamemap.Playerguy.pickupitem('g');
+
+                                Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex].symbolval = " ";
+                                Gamemap.Mapcell[Gamemap.Playerguy.tiley + 1, Gamemap.Playerguy.tilex] = Gamemap.Playerguy;
+
                             }
 
-                            Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex].symbolval = " ";
-                            Gamemap.Mapcell[Gamemap.Playerguy.tiley + 1, Gamemap.Playerguy.tilex] = Gamemap.Playerguy;
+                            else
+                            {
+                                Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex].symbolval = " ";
+                                Gamemap.Mapcell[Gamemap.Playerguy.tiley + 1, Gamemap.Playerguy.tilex] = Gamemap.Playerguy;
+                            }
 
 
                             break;
 
                         case tile.Movement.Left:
-                            if (Gamemap.Mapcell[Gamemap.Playerguy.tiley , Gamemap.Playerguy.tilex - 1].symbolval == "O")
+                            if (Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex - 1].symbolval == "O")
                             {
-                                Gamemap.GetItemAtPosition(Gamemap.Playerguy.tiley , Gamemap.Playerguy.tilex - 1);
+                                Gamemap.GetItemAtPosition(Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex - 1);
                                 Gamemap.Playerguy.pickupitem('g');
+
+                                Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex].symbolval = " ";
+
+                                Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex - 1] = Gamemap.Playerguy;
                             }
 
-                            Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex].symbolval = " ";
-
-                            Gamemap.Mapcell[Gamemap.Playerguy.tiley , Gamemap.Playerguy.tilex-1] = Gamemap.Playerguy;
+                            else
+                            {
+                                Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex].symbolval = " ";
+                                Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex - 1] = Gamemap.Playerguy;
+                            }
+                            
                             break;
 
                         case tile.Movement.Right:
 
-                            if (Gamemap.Mapcell[Gamemap.Playerguy.tiley , Gamemap.Playerguy.tilex + 1 ].symbolval == "O")
+                            if (Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex + 1].symbolval == "O")
                             {
-                                Gamemap.GetItemAtPosition(Gamemap.Playerguy.tiley , Gamemap.Playerguy.tilex + 1);
+                                Gamemap.GetItemAtPosition(Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex + 1);
                                 Gamemap.Playerguy.pickupitem('g');
+
+                                Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex].symbolval = " ";
+
+                                Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex + 1] = Gamemap.Playerguy;
                             }
 
-                            Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex].symbolval = " ";
+                            else
+                            {
+                                Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex].symbolval = " ";
 
-                            Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex + 1] = Gamemap.Playerguy;
+
+                                Gamemap.Mapcell[Gamemap.Playerguy.tiley, Gamemap.Playerguy.tilex + 1] = Gamemap.Playerguy;
+                            }
                             break;
 
                     }
@@ -771,6 +840,7 @@ namespace POE_Task_1
         private void UpButton_Click(object sender, EventArgs e)
         {
             Start.CharacterMove(tile.Movement.Up);
+            Start.Enemymove();
             MapLabel.Text = Start.Gamemap.ToString();
 
         }
@@ -778,18 +848,21 @@ namespace POE_Task_1
         private void RightButton_Click(object sender, EventArgs e)
         {
             Start.CharacterMove(tile.Movement.Right);
+            Start.Enemymove();
             MapLabel.Text = Start.Gamemap.ToString();
         }
 
         private void DownButton_Click(object sender, EventArgs e)
         {
             Start.CharacterMove(tile.Movement.Down);
+            Start.Enemymove();
             MapLabel.Text = Start.Gamemap.ToString();
         }
 
         private void LeftButton_Click(object sender, EventArgs e)
         {
             Start.CharacterMove(tile.Movement.Left);
+            Start.Enemymove();
             MapLabel.Text = Start.Gamemap.ToString();
         }
 

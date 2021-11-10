@@ -531,7 +531,7 @@ namespace POE_Task_1
                 }
                 return MapString;
             }
-
+            // Updated map making that includes mages and Gold.
             void mapmaking(int EnemyNumb, int Goldy)
             {
 
@@ -687,7 +687,7 @@ namespace POE_Task_1
                 {
                     Gamemap = new Map(5, 10, 10, 10, 10, 5);
                 }
-
+                //Enemy Move in game design.
                 public void Enemymove()
                 {
                     Random randomizer = new Random();

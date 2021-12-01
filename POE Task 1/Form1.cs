@@ -39,7 +39,6 @@ namespace POE_Task_1
 
 
 
-        Map.GameEngine Start = new Map.GameEngine();
 
 
 
@@ -59,6 +58,7 @@ namespace POE_Task_1
 
 
 
+        GameEngine Start = new GameEngine();
 
         private void StartButton_Click(object sender, EventArgs e)
         {
@@ -99,13 +99,13 @@ namespace POE_Task_1
         // saveSystem try, it keeps snagging because it cant save a random rumber.
         public static class saveSystem
         {
-            public static void SaveEverything(Map.GameEngine Savings)
+            public static void SaveEverything(GameEngine Savings)
             {
                 BinaryFormatter formatter = new BinaryFormatter();
                 string path = @"C:\Users\rampa\OneDrive\Documents" + "/Saves.sav";
                 FileStream stream = new FileStream(path,FileMode.Create);
 
-                Map.GameEngine data = new Map.GameEngine();
+               GameEngine data = new GameEngine();
 
                 formatter.Serialize(stream, data);
                 stream.Close();
@@ -114,7 +114,7 @@ namespace POE_Task_1
                 
             }
 
-            public static Map.GameEngine LoadData()
+            public static GameEngine LoadData()
             {
                 string path = @"C:\Users\rampa\OneDrive\Documents" + "/Saves.sav";
                 if (File.Exists(path))
@@ -122,7 +122,7 @@ namespace POE_Task_1
                     BinaryFormatter formatter = new BinaryFormatter();
                     FileStream stream = new FileStream(path, FileMode.Open);
 
-                    Map.GameEngine savings = formatter.Deserialize(stream) as Map.GameEngine;
+                    GameEngine savings = formatter.Deserialize(stream) as GameEngine;
                     stream.Close();
                     return savings;
 
@@ -142,7 +142,7 @@ namespace POE_Task_1
 
         private void LoadButton_Click(object sender, EventArgs e)
         {
-            Map.GameEngine data = saveSystem.LoadData();
+           GameEngine data = saveSystem.LoadData();
 
             Start.Gamemap.Mapcell = data.Gamemap.Mapcell;
 

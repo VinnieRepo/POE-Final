@@ -69,7 +69,7 @@ namespace POE_Task_1
 
         private void UpButton_Click(object sender, EventArgs e)
         {
-            Start.CharacterMove(tile.Movement.Up);
+            Start.Gamemap.Playerguy.move(tile.Movement.Up);
             Start.Enemymove();
             MapLabel.Text = Start.Gamemap.ToString();
 

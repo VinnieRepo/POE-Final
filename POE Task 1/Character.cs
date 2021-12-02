@@ -24,7 +24,7 @@ namespace POE_Task_1
             get { return Damage; }
             set { Damage = value; }
         }
-        // Task 2 Gold Purse and Constuctor
+        
         private int Goldpurse;
         public int goldpurse
         {
@@ -53,13 +53,13 @@ namespace POE_Task_1
 
 
 
-        //Position of the character.
+       
         protected void position(int x, int y)
         {
             tilex = x;
             tiley = y;
         }
-        // Death check.
+        
         public bool isdead(int value)
         {
             if (value == 1)
@@ -73,12 +73,12 @@ namespace POE_Task_1
             }
 
         }
-        //Attack method to be filled in later.
+       
         public virtual void attack(Character Target)
         {
             Target.HP -= Damage;
         }
-        //Distance Calc
+        
         private int distanceto(int target, int charpos)
         {
             int distance;
@@ -86,7 +86,7 @@ namespace POE_Task_1
             return distance;
 
         }
-        //Range check
+        
         public bool CheckRange(int target, int charpos)
         {
             int distance = distanceto(target, charpos);
@@ -101,13 +101,26 @@ namespace POE_Task_1
         }
 
 
-        //return move to be overridden
+       
         public abstract Movement returnmove(Movement move = 0);
 
 
-        //Tostring to be overridden.
+       
+
+        public void move(Movement direction)
+        {
+            switch (direction)
+            {
+                case Movement.NoMovement:
+                    break;
+                case Movement.Up:
+                    tiley = tiley - 1;
+                    break;
+
+            }
+        }
         public abstract override string ToString();
-        // Task 2 Pickup Item Class
+        
         public void pickupitem(char i)
         {
             if (i == 'g')

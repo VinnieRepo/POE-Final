@@ -94,7 +94,7 @@ namespace POE_Task_1
             }
             if (Start.Gamemap.Mapcell[x, y].tiletype == tile.Tiletypes.Gold)
             {
-                return " G ";
+                return " O ";
             }
 
             else
@@ -105,10 +105,9 @@ namespace POE_Task_1
 
         private void StartButton_Click(object sender, EventArgs e)
         {
-            
-            MapHolderBox.Text = Start.Gamemap.ToString();
-            CharacterLabel.Text = Start.Gamemap.Playerguy.ToString();
-            EnemyLabel.Text = Start.Gamemap.enemyguy.ToString();
+
+            reloadMap();
+           
         }
 
         private void UpButton_Click(object sender, EventArgs e)

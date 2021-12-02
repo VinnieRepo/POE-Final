@@ -11,7 +11,7 @@ namespace POE_Task_1
 
 
 
-
+       
 
         private tile[,] mapcell;
         public tile[,] Mapcell
@@ -82,14 +82,14 @@ namespace POE_Task_1
             goldamount = goldam;
 
 
-
+            emptymapmaking();
             mapmaking(enemycount, goldamount);
 
 
 
 
         }
-
+         
 
         void Create(tile.Tiletypes Tiletype, int x = 0, int y = 0)
         {
@@ -205,41 +205,84 @@ namespace POE_Task_1
             }
             return MapString;
         }
+
+        public void emptymapmaking()
+        {
+           
+                for (int Y = 0; Y < Mapheight; Y++)
+                {
+                    for (int X = 0; X < Mapwidth; X++)
+                    {
+                        if (X == 0 || Y == 0 || X == Mapwidth - 1 || Y == Mapheight - 1)
+                        {
+                           mapcell[Y, X] = new obstacles(X, Y, "X",tile.Tiletypes.Barrier);
+                        }
+                        else
+                        {
+                            mapcell[Y, X] = new emptyTiles(X, Y, " ", tile.Tiletypes.Empty);
+                        }
+                    }
+                }
+            
+        }
         // Updated map making that includes mages and Gold.
-        void mapmaking(int EnemyNumb, int Goldy)
+        public void mapmaking(int EnemyNumb, int Goldy)
         {
 
-            for (int y = 0; y < Mapheight; y++)
-            {
-                for (int x = 0; x < Mapwidth; x++)
-                {
-                    if (x == 0 || x == Mapwidth || y == 0 || y == Mapheight - 1)
-                    {
-                        Create(tile.Tiletypes.Barrier, x, y);
-                    }
-                    else
-                    {
-                        Create(tile.Tiletypes.Empty, x, y);
-                    }
-
-                }
-
-            }
-            Create(tile.Tiletypes.Hero);
+            CreateRevised(tile.Tiletypes.Hero);
 
             for (int e = 0; e < EnemyNumb; e++)
             {
-                Create(tile.Tiletypes.Enemy);
+                CreateRevised(tile.Tiletypes.Enemy);
             }
 
 
             for (int g = 0; g < Goldy; g++)
             {
-                Create(tile.Tiletypes.Gold);
+                CreateRevised(tile.Tiletypes.Gold);
             }
         }
 
 
+        public tile CreateRevised(tile.Tiletypes type)// This creates a Unique X and Y loction for every object for the map
+        {
+            Random mappy = new Random();
+            int UniqueY = mappy.Next(1, Mapwidth - 1);
+            int UniqueX = mappy.Next(1, Mapheight - 1);
+            tile ReturnType = null;
+            int goldRand = mappy.Next(1, 5);
+            
+
+            while (mapcell[UniqueY, UniqueX].tiletype != tile.Tiletypes.Empty)
+            {
+                UniqueY = mappy.Next(1, Mapheight - 1);
+                UniqueX = mappy.Next(1, Mapwidth - 1);
+            }
+
+            if (type == tile.Tiletypes.Hero)
+            {
+                ReturnType = new Hero(UniqueX, UniqueY," H ", tile.Tiletypes.Hero,10,10,10);
+            }
+            else if (type == tile.Tiletypes.Goblin)
+            {
+                ReturnType = new Goblin(UniqueX, UniqueY," G ", tile.Tiletypes.Goblin, 10, 10, 10);
+            }
+            else if (type == tile.Tiletypes.Gold)
+            {
+                ReturnType = new gold(UniqueX, UniqueY," O " , tile.Tiletypes.Gold);
+            }
+            else if (type == tile.Tiletypes.Mage)
+            {
+                ReturnType = new Mage(UniqueX, UniqueY," M " , tile.Tiletypes.Mage, 10, 10, 10);
+            }
+          
+           
+            else
+            {
+                ReturnType = null;
+            }
+            return ReturnType;
+        }
 
 
 

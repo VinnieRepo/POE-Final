@@ -8,6 +8,7 @@ namespace POE_Task_1
     {
         public obstacles(int tilex, int tiley, string symbolval, Tiletypes tiletype) : base(tilex, tiley, symbolval, tiletype)
         {
+            tiletype = Tiletypes.Barrier;
         }
     }
 }

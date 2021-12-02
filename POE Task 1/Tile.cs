@@ -37,6 +37,8 @@ namespace POE_Task_1
             Gold,
             Weapon,
             Barrier,
+            Goblin,
+            Mage,
         }
         protected Tiletypes Tiletype;
 

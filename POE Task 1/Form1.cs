@@ -31,7 +31,7 @@ namespace POE_Task_1
         private void Form1_Load(object sender, EventArgs e)
         {
 
-
+          
 
         }
 
@@ -42,11 +42,7 @@ namespace POE_Task_1
 
 
 
-
-
-
-
-
+     
 
 
 
@@ -60,8 +56,56 @@ namespace POE_Task_1
 
         GameEngine Start = new GameEngine();
 
+        public void reloadMap()
+        {
+            string NewMap = " ";
+            for (int y = 0; y  <  Start.Gamemap.Mapwidth; y++)
+            {
+                for (int x = 0; x < Start.Gamemap.Mapheight; x++)
+                {
+                    NewMap += charSubject(x, y);
+                }
+                NewMap += System.Environment.NewLine;
+            }
+            MapHolderBox.Text = NewMap;
+        }
+
+        public string charSubject(int x, int y)
+        {
+            if (Start.Gamemap.Mapcell[x,y].tiletype == tile.Tiletypes.Empty)
+            {
+                return "";
+            }
+            else if (Start.Gamemap.Mapcell[x, y].tiletype == tile.Tiletypes.Barrier)
+            { 
+                return " X ";
+            }
+            else if (Start.Gamemap.Mapcell[x, y].tiletype == tile.Tiletypes.Hero)
+            {
+                return " H ";
+            }
+            if (Start.Gamemap.Mapcell[x, y].tiletype == tile.Tiletypes.Goblin)
+            {
+                return " G ";
+            }
+            if (Start.Gamemap.Mapcell[x, y].tiletype == tile.Tiletypes.Mage)
+            {
+                return " M ";
+            }
+            if (Start.Gamemap.Mapcell[x, y].tiletype == tile.Tiletypes.Gold)
+            {
+                return " G ";
+            }
+
+            else
+            {
+                return " ! ";
+            }
+        }
+
         private void StartButton_Click(object sender, EventArgs e)
         {
+            
             MapHolderBox.Text = Start.Gamemap.ToString();
             CharacterLabel.Text = Start.Gamemap.Playerguy.ToString();
             EnemyLabel.Text = Start.Gamemap.enemyguy.ToString();
@@ -71,7 +115,7 @@ namespace POE_Task_1
         {
             Start.Gamemap.Playerguy.move(tile.Movement.Up);
             Start.Enemymove();
-            MapLabel.Text = Start.Gamemap.ToString();
+            reloadMap();
 
         }
 

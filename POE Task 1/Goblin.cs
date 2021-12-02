@@ -8,6 +8,8 @@ namespace POE_Task_1
     {    //Constructor
         public Goblin(int tilex, int tiley, string symbolval, Tiletypes tiletype, int hp, int maxhp, int damage) : base(tilex, tiley, symbolval, tiletype, hp, maxhp, damage)
         {
+          
+            tiletype = Tiletypes.Goblin;
         }
 
         //random movement

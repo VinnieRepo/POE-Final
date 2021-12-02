@@ -12,6 +12,7 @@ namespace POE_Task_1
         {
             Magex = tilex;
             Magey = tiley;
+            tiletype = Tiletypes.Mage;
         }
         public override Movement returnmove(Movement move = Movement.Up)
         {

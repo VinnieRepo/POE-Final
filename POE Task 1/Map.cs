@@ -11,7 +11,7 @@ namespace POE_Task_1
 
 
 
-       
+
 
         private tile[,] mapcell;
         public tile[,] Mapcell
@@ -27,9 +27,9 @@ namespace POE_Task_1
             set { playerguy = value; }
         }
 
-        private List<Enemy> enemies;
+        private Enemy[] enemies;
 
-        public List<Enemy> enemycount
+        public Enemy[] enemylist
         {
             get { return enemies; }
             set { enemies = value; }
@@ -46,9 +46,9 @@ namespace POE_Task_1
             get { return mapheight; }
             set { mapheight = value; }
         }
-        private Enemy Enemyguy;
+        private Goblin Enemyguy;
 
-        public Enemy enemyguy
+        public Goblin enemyguy
         {
             get { return Enemyguy; }
             set { Enemyguy = value; }
@@ -77,7 +77,7 @@ namespace POE_Task_1
             Mapheight = mappy.Next(minheight, maxheight);
             Mapwidth = mappy.Next(minwidth, maxwidth);
             Mapcell = new tile[mapwidth, mapheight];
-            enemies = new List<Enemy>();
+            
 
             goldamount = goldam;
 
@@ -138,17 +138,15 @@ namespace POE_Task_1
                     if (enemtype == 2)
                     {
                         Mage NewMage = new Mage(Enemyx, Enemyy, "M", Tiletype, 15, 15, 5);
-                        enemies.Add(NewMage);
-                        enemyguy = NewMage;
-                        Mapcell[Enemyx, Enemyy] = NewMage;
-                        enemtype = mappy.Next(1, 2);
+                        
+                       
                     }
 
 
                     else if (enemtype == 1)
                     {
                         Goblin NewEnemy = new Goblin(Enemyx, Enemyy, "G", Tiletype, 10, 10, 1);
-                        enemies.Add(NewEnemy);
+                        
                         enemyguy = NewEnemy;
                         Mapcell[Enemyx, Enemyy] = NewEnemy;
                         enemtype = mappy.Next(1, 3);
@@ -230,10 +228,13 @@ namespace POE_Task_1
         {
 
             CreateRevised(tile.Tiletypes.Hero);
+            Mapcell[playerguy.tilex, playerguy.tiley] = playerguy;
 
             for (int e = 0; e < EnemyNumb; e++)
             {
-                CreateRevised(tile.Tiletypes.Enemy);
+                CreateRevised(tile.Tiletypes.Goblin);
+                enemylist[e] = enemyguy;
+                Mapcell[enemyguy.tiley, enemyguy.tilex] = enemyguy;
             }
 
 
@@ -262,10 +263,13 @@ namespace POE_Task_1
             if (type == tile.Tiletypes.Hero)
             {
                 ReturnType = new Hero(UniqueX, UniqueY," H ", tile.Tiletypes.Hero,10,10,10);
+                playerguy = (Hero)ReturnType;
+
             }
             else if (type == tile.Tiletypes.Goblin)
             {
                 ReturnType = new Goblin(UniqueX, UniqueY," G ", tile.Tiletypes.Goblin, 10, 10, 10);
+                enemyguy = (Goblin)ReturnType;
             }
             else if (type == tile.Tiletypes.Gold)
             {
